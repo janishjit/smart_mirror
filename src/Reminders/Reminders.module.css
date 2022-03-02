@@ -1,14 +1,6 @@
 .container {
-    position: absolute;
-    width: 288px;
-    height: 204px;
-    /* left: 960.13px; */
-    top: 114px;
-
-    background: #CDC4B8;
-    border: 0.7px solid #F2EEE8;
-    box-sizing: border-box;
-    border-radius: 15px;
+  border: 1px solid var(--text-light);
+  border-radius: 15px;
+  padding: 10px;
+  margin: 10px;
 }
-
-.li{}
