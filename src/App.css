@@ -1,0 +1,18 @@
+.App {
+  display: flex;
+  background-color: green;
+  flex: 1;
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+.reflection-area {
+  background-color: var(--bg-light);
+  flex: 0.66;
+}
+
+.col1,
+.col3 {
+  flex: 0.33;
+  background-color: var(--bg-dark);
+}
