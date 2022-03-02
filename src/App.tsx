@@ -36,8 +36,9 @@ function App() {
       <div className="reflection-area">reflection area</div>
       <div className="col3">
         <Placeholder />
+        <Placeholder />
         <Weather />
-
+        <Placeholder />
       </div>
     </div>
   );
