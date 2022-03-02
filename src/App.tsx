@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import Placeholder from "./Placeholder";
 import Schedule from "./Schedule";
+import Weather from "./Weather";
 import Welcome from "./Welcome";
 
 // Look at figma for modules, claim modules with a comment on the figma file
@@ -33,7 +34,11 @@ function App() {
         <Schedule schedule={ EXAMPLE_SCHEDULE } />
       </div>
       <div className="reflection-area">reflection area</div>
-      <div className="col3">right column</div>
+      <div className="col3">
+        <Placeholder />
+        <Weather />
+
+      </div>
     </div>
   );
 }
