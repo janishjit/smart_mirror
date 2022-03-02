@@ -2,6 +2,7 @@ import React from "react";
 import "./App.css";
 import Placeholder from "./Placeholder";
 import Schedule from "./Schedule";
+import Weather from "./Weather";
 import Welcome from "./Welcome";
 import Reminders from "./Reminders";
 import DateTime from "./DateTime"
@@ -50,6 +51,8 @@ function App() {
             EXAMPLE_REMINDERS
           }
         />
+        <Weather />
+        <Placeholder />
       </div>
     </div>
   );
