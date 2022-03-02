@@ -3,6 +3,8 @@ import "./App.css";
 import Placeholder from "./Placeholder";
 import Schedule from "./Schedule";
 import Welcome from "./Welcome";
+import Reminders from "./Reminders";
+import DateTime from "./DateTime"
 
 // Look at figma for modules, claim modules with a comment on the figma file
 // https://www.figma.com/file/yrqrIB1452Kw8NM9943uOt/Magic-Mirror-Wireframes?node-id=2%3A17
@@ -15,7 +17,12 @@ const EXAMPLE_SCHEDULE = [
   { time: "8:00pm", event: "Movie Night at Josh’s" },
 ];
 
-
+const EXAMPLE_REMINDERS = [
+  "Buy Tickets to Rex Orange County",
+  "Pack your headphones before you leave",
+  "Book Dental Appt.",
+  "Buy Dad's B-Day Gift"
+]
 
 
 
@@ -33,7 +40,17 @@ function App() {
         <Schedule schedule={ EXAMPLE_SCHEDULE } />
       </div>
       <div className="reflection-area">reflection area</div>
-      <div className="col3">right column</div>
+      <div className="col3">
+        <DateTime
+          date={ "1:00 pm" }
+          time={ "Tuesday, February 22nd" }
+        />
+        <Reminders
+          reminders={
+            EXAMPLE_REMINDERS
+          }
+        />
+      </div>
     </div>
   );
 }

@@ -1,0 +1,32 @@
+.date {
+    position: absolute; 
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 45px;
+    line-height: 67px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #F2EEE8;
+}
+
+.time {
+    position: absolute;
+    width: 237.92px;
+    height: 22.63px;
+    top: 71.28px;
+
+    font-family: Poppins;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+    color: #F2EEE8;
+}
