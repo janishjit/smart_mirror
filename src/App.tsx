@@ -6,6 +6,7 @@ import Weather from "./Weather";
 import Welcome from "./Welcome";
 import Reminders from "./Reminders";
 import DateTime from "./DateTime"
+import Directions from "./Directions";
 
 // Look at figma for modules, claim modules with a comment on the figma file
 // https://www.figma.com/file/yrqrIB1452Kw8NM9943uOt/Magic-Mirror-Wireframes?node-id=2%3A17
@@ -37,7 +38,7 @@ function App() {
             "Growing old is mandatory, growing up is optional. - Anonymous"
           }
         />
-        <Placeholder />
+        <Directions />
         <Schedule schedule={ EXAMPLE_SCHEDULE } />
       </div>
       <div className="reflection-area">reflection area</div>
