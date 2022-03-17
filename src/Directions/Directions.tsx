@@ -2,6 +2,7 @@ import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { DirectionsService, DirectionsRenderer, } from "@react-google-maps/api";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./directions.module.css";
+import formatTime, { getLeaveAt, getMinutesFromDuration } from "./formatTime";
 import generateTravelOptions from "./generateTravelOptions";
 const containerStyle = {
   width: "400px",
@@ -78,7 +79,8 @@ const GoogleMapWrapper = (props: GoogleMapWrapperProps) => {
 
   return isLoaded ? (
     <div className={ styles.container }>
-      <h1>{ duration && duration / 60 } minutes</h1>
+      <h1>Your trip takes { duration && getMinutesFromDuration(duration) } minutes, </h1>
+      <h1>Leave at { duration && getLeaveAt(Date.now(), duration).toLocaleTimeString() }</h1>
       <GoogleMap
         mapContainerStyle={ containerStyle }
         center={ center }

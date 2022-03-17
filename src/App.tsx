@@ -44,8 +44,6 @@ function App() {
       <div className="reflection-area">reflection area</div>
       <div className="col3">
         <DateTime
-          date={ "1:00 pm" }
-          time={ "Tuesday, February 22nd" }
         />
         <Reminders
           reminders={
