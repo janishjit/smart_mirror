@@ -1,0 +1,56 @@
+.container,
+.range {
+  display: flex;
+  flex-direction: row;
+}
+
+.condition,
+.avg {
+  justify-content: space-around;
+  align-items: center;
+}
+
+.condition {
+  display: flex;
+  flex: 0.6;
+  flex-direction: column;
+}
+
+.avg {
+  flex: 0.4;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  border: 1px solid var(--text-light);
+  padding: 0 5px;
+  border-radius: 15px;
+}
+
+.conditionText {
+  text-align: center;
+  font-size: 0.75em;
+  font-weight: lighter;
+}
+
+.range {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  font-weight: lighter;
+  justify-content: space-between;
+}
+
+.avgText {
+  font-size: 1.5em;
+  font-weight: 500;
+  margin: 0;
+  margin-top: 10px;
+}
+
+.rangeText {
+  font-size: 0.9em;
+  font-weight: lighter;
+  flex: 1;
+}
