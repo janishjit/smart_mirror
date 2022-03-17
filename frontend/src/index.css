@@ -1,0 +1,26 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  --font: "Poppins";
+  font-family: var(--font);
+  --bg-light: #f0e5d0;
+  --bg-dark: #cdc4b8;
+  --text-light: #f2eee8;
+  font-size: 1rem;
+}
+
+html {
+  background-color: var(--bg-dark);
+}
+
+.text {
+  color: var(--text-light);
+}

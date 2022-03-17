@@ -1,0 +1,15 @@
+.hi {
+  font-size: 2.5em;
+  flex-wrap: wrap;
+}
+
+.name {
+  font-size: 3em;
+  font-weight: 600;
+}
+
+.quote {
+  font-style: italic;
+  font-size: 1em;
+  font-weight: lighter;
+}
