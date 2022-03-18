@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "mirror",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/Users/trevorflanigan/Desktop/Projects/mirror/frontend/amplify/backend/api/mirror/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 265,
+      "apiKeyExpirationDate": "2022-12-08T23:10:16.989Z",
+      "keyDescription": "api key for mirror"
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": []
+  }
+}

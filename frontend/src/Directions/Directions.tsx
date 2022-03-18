@@ -1,6 +1,7 @@
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { DirectionsService, DirectionsRenderer, } from "@react-google-maps/api";
 import { useCallback, useEffect, useState } from "react";
+import useEvents from "../EventsContext/useEvents";
 import styles from "./directions.module.css";
 import formatTime, { getLeaveAt, getMinutesFromDuration } from "./formatTime";
 import generateTravelOptions from "./generateTravelOptions";
@@ -26,10 +27,22 @@ const GoogleMapWrapper = (props: GoogleMapWrapperProps) => {
   const [origin, setOrigin] = useState<null | google.maps.Place>({
     query: "5983 Gray Ave.",
   });
-  const [destination, setDestination] = useState<null | google.maps.Place>({
-    query: "Neville Scarfe, Room 100",
-  });
+  const events = useEvents();
+  const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [destination, setDestination] = useState<null | google.maps.Place>(null);
   const [duration, setDuration] = useState<number>();
+  const [errorState, setErrorState] = useState<any>({ error: false });
+  // Get directions to first meeting
+  useEffect(() => {
+    console.log(events);
+    let firstEvent = events.find((event: any) => !!event.event.location);
+    console.log(firstEvent);
+    if (firstEvent) {
+      setDestination({ query: firstEvent.event.location });
+      setSelectedEvent(firstEvent);
+    }
+
+  }, [events])
 
   const onLoad = useCallback(function callback(map) {
     const bounds = new window.google.maps.LatLngBounds();
@@ -43,6 +56,12 @@ const GoogleMapWrapper = (props: GoogleMapWrapperProps) => {
 
   if (!isLoaded) {
     return null;
+  }
+
+  if (errorState.error) {
+    return <div>
+      There was an error getting directions to your first meeting
+    </div>
   }
 
   if (!directions) {
@@ -62,7 +81,13 @@ const GoogleMapWrapper = (props: GoogleMapWrapperProps) => {
             travelMode: google.maps.TravelMode.DRIVING,
             ...generateTravelOptions(google.maps.TravelMode.DRIVING)
           } }
-          callback={ (e) => {
+          callback={ (e: any) => {
+            if (e.status === 'NOT_FOUND') {
+              console.log("failed to get directions");
+              setErrorState({ error: true });
+              setDirections(null);
+              return;
+            };
             let duration = 0;
             let legs = e?.routes[0].legs;
             if (legs) {
@@ -79,18 +104,20 @@ const GoogleMapWrapper = (props: GoogleMapWrapperProps) => {
 
   return isLoaded ? (
     <div className={ styles.container }>
-      <h1>Your trip takes { duration && getMinutesFromDuration(duration) } minutes, </h1>
-      <h1>Leave at { duration && getLeaveAt(Date.now(), duration).toLocaleTimeString() }</h1>
-      <GoogleMap
-        mapContainerStyle={ containerStyle }
-        center={ center }
-        zoom={ 10 }
-        onLoad={ onLoad }
-        onUnmount={ onUnmount }
-        options={ { streetViewControl: false, mapTypeControl: false } }
-      >
-        <DirectionsRenderer directions={ directions } />
-      </GoogleMap>
+      { selectedEvent && <>
+        <h1>Your trip takes { duration && getMinutesFromDuration(duration) } minutes, </h1>
+        <h1>Leave at { duration && getLeaveAt(new Date(selectedEvent!.when).getTime(), duration).toLocaleTimeString() }</h1>
+        <GoogleMap
+          mapContainerStyle={ containerStyle }
+          center={ center }
+          zoom={ 10 }
+          onLoad={ onLoad }
+          onUnmount={ onUnmount }
+          options={ { streetViewControl: false, mapTypeControl: false } }
+        >
+          <DirectionsRenderer directions={ directions } />
+        </GoogleMap>
+      </> }
     </div>
   ) : (
     <></>

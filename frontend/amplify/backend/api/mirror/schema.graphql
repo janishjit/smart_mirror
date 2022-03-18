@@ -1,0 +1,4 @@
+type Reminder @model {
+  id: ID!
+  name: String!
+}
