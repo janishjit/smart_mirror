@@ -37,6 +37,9 @@ class Server {
       socket.on("message", (e) => {
         console.log(e);
       });
+      socket.on("disconnect", (e) => {
+        console.log(JSON.stringify(e));
+      });
     });
   }
 }
