@@ -1,10 +1,17 @@
-const http = require("http");
-const express = require("express");
-const bodyParser = require("body-parser");
-const socketIo = require("socket.io");
+// const http = require("http");
+// const express = require("express");
+// const bodyParser = require("body-parser");
+// const socketIo = require("socket.io");
+import http from "http";
+import express from "express";
+import bodyParser from "body-parser";
+import socketIo from "socket.io";
 
 class Server {
-  constructor(port) {
+  public port;
+  private app;
+  private httpServer;
+  constructor(port: number) {
     this.port = port || 8080;
     this.app = express();
     this.httpServer = http.createServer(this.app);
@@ -21,6 +28,7 @@ class Server {
     this.app.get("/", (req, res) => {
       res.send("hello world!");
     });
+
     this.setupSockets();
   }
 
@@ -31,8 +39,13 @@ class Server {
   }
 
   setupSockets() {
-    const io = socketIo(this.httpServer);
+    const io = new socketIo.Server(this.httpServer);
     io.on("connection", (socket) => {
+      // this could lead to bugs i think, multiple handlers init-ed
+      this.app.post("/voice", async (req, res) => {
+        io.emit("voice", req.body);
+        res.sendStatus(200);
+      });
       console.log(`Socket ${socket.id} connected.`);
       socket.on("message", (e) => {
         console.log(e);
@@ -44,4 +57,4 @@ class Server {
   }
 }
 
-module.exports = Server;
+export default Server;

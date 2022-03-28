@@ -1,0 +1,28 @@
+.main {
+  text-align: center;
+  font-size: larger;
+}
+
+.fading {
+  opacity: 0;
+  color: black;
+  animation-name: fadeOut;
+  animation-duration: 10s;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+}

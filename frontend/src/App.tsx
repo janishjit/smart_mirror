@@ -11,6 +11,9 @@ import { EventsProvider } from "./EventsContext/EventsContext";
 import { RemindersProvider } from "./Reminders/RemindersContext";
 import Amplify from "aws-amplify";
 import awsmobile from "./aws-exports";
+import socket from "./Socket";
+import Speech from "./Speech";
+socket.emit("connection", "hello world")
 
 // Look at figma for modules, claim modules with a comment on the figma file
 // https://www.figma.com/file/yrqrIB1452Kw8NM9943uOt/Magic-Mirror-Wireframes?node-id=2%3A17
@@ -134,7 +137,9 @@ function App() {
           <Schedule schedule={ EXAMPLE_SCHEDULE } />
         </EventsProvider>
       </div>
-      <div className="reflection-area"></div>
+      <div className="reflection-area">
+        <Speech />
+      </div>
       <div className="col3">
         <DateTime
         />

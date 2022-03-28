@@ -7,6 +7,9 @@
 
 .reflection-area {
   background-color: var(--bg-light);
+  flex-direction: column;
+  display: flex;
+  justify-content: flex-end;
   flex: 0.67;
 }
 
