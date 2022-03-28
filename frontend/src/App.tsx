@@ -13,6 +13,8 @@ import Amplify from "aws-amplify";
 import awsmobile from "./aws-exports";
 import socket from "./Socket";
 import Speech from "./Speech";
+import Closet from "./Closet/Closet";
+import ClosetDetailed from "./ClosetDetailed";
 socket.emit("connection", "hello world")
 
 // Look at figma for modules, claim modules with a comment on the figma file
@@ -111,9 +113,15 @@ function initClient(onSuccess: Function) {
 
 Amplify.configure(awsmobile);
 
+enum ShowState {
+  BLANK,
+  CLOSET
+}
+
 function App() {
   const [events, setEvents] = useState<any>([]);
   const [loaded, setLoaded] = useState(false);
+  const [showState, setShowState] = useState<ShowState>(ShowState.CLOSET);
   useEffect(() => {
     // @ts-ignore
     gapi.load("client:auth2", () => {
@@ -138,6 +146,7 @@ function App() {
         </EventsProvider>
       </div>
       <div className="reflection-area">
+        { showState === ShowState.CLOSET && <ClosetDetailed /> }
         <Speech />
       </div>
       <div className="col3">
@@ -147,7 +156,10 @@ function App() {
           <Reminders />
         </RemindersProvider>
         <Weather />
-        <Placeholder />
+        <div className="closet">
+          <Placeholder />
+          <Closet />
+        </div>
       </div>
     </div>
   );

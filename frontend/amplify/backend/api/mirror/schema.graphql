@@ -2,3 +2,12 @@ type Reminder @model {
   id: ID!
   name: String!
 }
+
+type Query {
+  getClothingPhotos(itemType: String): getClothingPhotosOutput
+    @function(name: "getClothingPhotos-${env}")
+}
+
+type getClothingPhotosOutput {
+  photos: [String!]!
+}

@@ -71,6 +71,11 @@ export type DeleteReminderInput = {
   id: string,
 };
 
+export type getClothingPhotosOutput = {
+  __typename: "getClothingPhotosOutput",
+  photos?: Array< string >,
+};
+
 export type ModelReminderFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -143,6 +148,17 @@ export type DeleteReminderMutation = {
     name: string,
     createdAt: string,
     updatedAt: string,
+  } | null,
+};
+
+export type GetClothingPhotosQueryVariables = {
+  itemType?: string | null,
+};
+
+export type GetClothingPhotosQuery = {
+  getClothingPhotos?:  {
+    __typename: "getClothingPhotosOutput",
+    photos: Array< string >,
   } | null,
 };
 

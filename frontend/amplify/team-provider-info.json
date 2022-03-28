@@ -17,6 +17,12 @@
           "appId": "d2cdtupbvgm4bf",
           "type": "manual"
         }
+      },
+      "function": {
+        "getClothingPhotos": {
+          "deploymentBucketName": "amplify-mirror-dev-155109-deployment",
+          "s3Key": "amplify-builds/getClothingPhotos-59424148553539616158-build.zip"
+        }
       }
     }
   }

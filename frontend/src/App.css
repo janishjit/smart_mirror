@@ -26,3 +26,10 @@
   flex-direction: column;
   display: flex;
 }
+
+.closet {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  justify-content: space-evenly;
+}
