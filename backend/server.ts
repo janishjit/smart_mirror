@@ -40,6 +40,10 @@ class Server {
 
   setupSockets() {
     const io = new socketIo.Server(this.httpServer);
+    this.app.get("/showCloset", async (req, res) => {
+      io.emit("showCloset");
+      res.sendStatus(200);
+    });
     io.on("connection", (socket) => {
       // this could lead to bugs i think, multiple handlers init-ed
       this.app.post("/voice", async (req, res) => {
