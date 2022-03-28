@@ -67,6 +67,17 @@ class Server {
 
   setupSockets() {
     const io = new socketIo.Server(this.httpServer);
+      this.app.post("/voice", async (req, res) => {
+        io.emit("voice", req.body);
+        let request = makeParams(req.body.data);
+        console.log(request);
+        console.log(req.body);
+
+        lex.recognizeText(makeParams(req.body.data), (err, data) => {
+          io.emit("voiceresponse", data);
+        });
+        res.sendStatus(200);
+      });
     this.app.get("/ShowCloset", async (req, res) => {
       io.emit("ShowCloset");
       res.sendStatus(200);
@@ -89,17 +100,6 @@ class Server {
     });
     io.on("connection", (socket) => {
       // this could lead to bugs i think, multiple handlers init-ed
-      this.app.post("/voice", async (req, res) => {
-        io.emit("voice", req.body);
-        let request = makeParams(req.body.data);
-        console.log(request);
-        console.log(req.body);
-
-        lex.recognizeText(makeParams(req.body.data), (err, data) => {
-          io.emit("voiceresponse", data);
-        });
-        res.sendStatus(200);
-      });
       console.log(`Socket ${socket.id} connected.`);
       socket.on("message", (e) => {
         console.log(e);
