@@ -4,8 +4,6 @@ import { ListRemindersQuery, ListRemindersQueryVariables } from "../API";
 import { listReminders } from "../graphql/queries";
 
 const getReminders = async (listOptions?: ListRemindersQueryVariables) => {
-  console.log("GETTING REMINDERS");
-
   const res = (await API.graphql({
     query: listReminders,
     variables: listOptions,

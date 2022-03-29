@@ -2,7 +2,6 @@ const weatherAPIEndpoint = `https://api.weatherapi.com/v1/forecast.json?key=${pr
 
 const getWeather = async () => {
   const res = await fetch(weatherAPIEndpoint);
-  console.log(res);
   if (!res.ok) throw new Error(`Failed to get weather data: ${res}`);
 
   let data = await res.json();

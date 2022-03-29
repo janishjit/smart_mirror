@@ -6,7 +6,6 @@ import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 import useEvents from "../EventsContext/useEvents";
 
 type ScheduleProps = {
-  schedule: EventType[];
 };
 
 const formatDateTime = (dateTime: string) => {
@@ -14,7 +13,7 @@ const formatDateTime = (dateTime: string) => {
   return format(date, 'h:mm a');
 }
 
-const Schedule = ({ schedule }: ScheduleProps) => {
+const Schedule = ({ }: ScheduleProps) => {
   const events = useEvents();
 
   return <div className={ styles.container }>

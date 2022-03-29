@@ -9,6 +9,8 @@ export const EventsProvider = (props: { children?: ReactNode }) => {
   const { children } = props;
   const [events, _setEvents] = useState<any>([]);
   function setEvents(eventsList: any) {
+    console.log(eventsList);
+
     _setEvents(eventsList);
   }
 

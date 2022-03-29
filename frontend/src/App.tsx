@@ -15,6 +15,7 @@ import socket from "./Socket";
 import Speech from "./Speech";
 import Closet from "./Closet/Closet";
 import ClosetDetailed from "./ClosetDetailed";
+import ScheduleDetailed from "./ScheduleDetailed";
 socket.emit("connection", "hello world")
 
 // Look at figma for modules, claim modules with a comment on the figma file
@@ -78,6 +79,7 @@ function listUpcomingEvents() {
 }
 
 function updateSigninStatus(isSignedIn: boolean) {
+  console.log(isSignedIn);
   if (isSignedIn) {
     listUpcomingEvents();
   } else {
@@ -102,7 +104,6 @@ function initClient(onSuccess: Function) {
       function () {
         // Listen for sign-in state changes.
         /* @ts-ignore */
-        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
         onSuccess();
       },
       function (error: any) {
@@ -115,23 +116,34 @@ Amplify.configure(awsmobile);
 
 enum ShowState {
   BLANK,
-  CLOSET
+  CLOSET,
+  SCHEDULE,
 }
 
 function App() {
   const [events, setEvents] = useState<any>([]);
   const [loaded, setLoaded] = useState(false);
-  const [showState, setShowState] = useState<ShowState>(ShowState.CLOSET);
+  const [showState, setShowState] = useState<ShowState>(ShowState.BLANK);
   useEffect(() => {
     socket.on("voiceresponse", voiceResponse => {
-      console.log(voiceResponse);
-      console.log(voiceResponse.intentName);
+      const intentName = voiceResponse.intentName;
+      if (intentName === "ShowCloset") {
+        setShowState(ShowState.CLOSET);
+      }
+      else if (intentName === "ShowDay") {
+        setShowState(ShowState.SCHEDULE);
+      }
     })
-  }, [])
+  }, []);
   useEffect(() => {
     // @ts-ignore
     gapi.load("client:auth2", () => {
+      // @ts-ignore
       initClient(() => {
+        // @ts-ignore
+        let auth = gapi.auth2.getAuthInstance();
+        const isSignedIn = auth.isSignedIn.get();
+        if (!isSignedIn) auth.signIn();
         setLoaded(true);
       });
     })
@@ -148,11 +160,12 @@ function App() {
         />
         <EventsProvider>
           <Directions />
-          <Schedule schedule={ EXAMPLE_SCHEDULE } />
+          <Schedule />
         </EventsProvider>
       </div>
       <div className="reflection-area">
         { showState === ShowState.CLOSET && <ClosetDetailed /> }
+        { showState === ShowState.SCHEDULE && <ScheduleDetailed /> }
         <Speech />
       </div>
       <div className="col3">
