@@ -16,6 +16,7 @@ import Speech from "./Speech";
 import Closet from "./Closet/Closet";
 import ClosetDetailed from "./ClosetDetailed";
 import ScheduleDetailed from "./ScheduleDetailed";
+import Emails from "./Emails/Emails";
 socket.emit("connection", "hello world")
 
 // Look at figma for modules, claim modules with a comment on the figma file
@@ -39,8 +40,7 @@ const EXAMPLE_REMINDERS = [
 const DISCOVERY_DOCS = [
   "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
 ];
-const SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
-
+const SCOPES = "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.readonly";
 
 
 /**
@@ -100,6 +100,7 @@ function initClient(onSuccess: Function) {
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES,
     })
+    /* @ts-ignore */
     .then(
       function () {
         // Listen for sign-in state changes.
@@ -139,7 +140,11 @@ function App() {
     // @ts-ignore
     gapi.load("client:auth2", () => {
       // @ts-ignore
+      console.log(gapi);
+
       initClient(() => {
+        // @ts-ignore
+        console.log(gapi.auth2.BasicProfile);
         // @ts-ignore
         let auth = gapi.auth2.getAuthInstance();
         const isSignedIn = auth.isSignedIn.get();
@@ -176,7 +181,7 @@ function App() {
         </RemindersProvider>
         <Weather />
         <div className="closet">
-          <Placeholder />
+          <Emails />
           <Closet />
         </div>
       </div>

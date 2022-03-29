@@ -1,0 +1,25 @@
+.root {
+  position: relative;
+  flex: 1;
+  height: 35%;
+  align-self: center;
+  border: 1px solid white;
+  border-radius: 15px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  background-color: white;
+}
+
+.badge {
+  position: absolute;
+  display: grid;
+  line-height: 0px;
+  place-items: center;
+  top: -5px;
+  right: -7px;
+  background-color: #f44336;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+}
