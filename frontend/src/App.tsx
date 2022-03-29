@@ -123,6 +123,12 @@ function App() {
   const [loaded, setLoaded] = useState(false);
   const [showState, setShowState] = useState<ShowState>(ShowState.CLOSET);
   useEffect(() => {
+    socket.on("voiceresponse", voiceResponse => {
+      console.log(voiceResponse);
+      console.log(voiceResponse.intentName);
+    })
+  }, [])
+  useEffect(() => {
     // @ts-ignore
     gapi.load("client:auth2", () => {
       initClient(() => {
