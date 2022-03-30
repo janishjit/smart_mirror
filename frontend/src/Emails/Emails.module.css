@@ -1,4 +1,5 @@
 .root {
+  cursor: pointer;
   position: relative;
   flex: 1;
   height: 35%;
@@ -9,6 +10,10 @@
   display: flex;
   align-items: center;
   background-color: white;
+}
+
+.root:hover {
+  filter: brightness(0.88);
 }
 
 .badge {

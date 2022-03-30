@@ -2,6 +2,7 @@ import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { DirectionsService, DirectionsRenderer, } from "@react-google-maps/api";
 import { useCallback, useEffect, useState } from "react";
 import useEvents from "../EventsContext/useEvents";
+import { GoogleEvent } from "../types";
 import styles from "./directions.module.css";
 import formatTime, { getLeaveAt, getMinutesFromDuration } from "./formatTime";
 import generateTravelOptions from "./generateTravelOptions";
@@ -34,9 +35,7 @@ const GoogleMapWrapper = (props: GoogleMapWrapperProps) => {
   const [errorState, setErrorState] = useState<any>({ error: false });
   // Get directions to first meeting
   useEffect(() => {
-    console.log(events);
-    let firstEvent = events.find((event: any) => !!event.event.location);
-    console.log(firstEvent);
+    let firstEvent = events.find((event: GoogleEvent) => !!event.event.location);
     if (firstEvent) {
       setDestination({ query: firstEvent.event.location });
       setSelectedEvent(firstEvent);
@@ -71,7 +70,7 @@ const GoogleMapWrapper = (props: GoogleMapWrapperProps) => {
       zoom={ 10 }
       onLoad={ onLoad }
       onUnmount={ onUnmount }
-      options={ { streetViewControl: false, mapTypeControl: false } }
+      options={ { streetViewControl: false, mapTypeControl: false, fullscreenControl: false } }
     >
       { origin != null && destination != null &&
         <DirectionsService
@@ -83,7 +82,6 @@ const GoogleMapWrapper = (props: GoogleMapWrapperProps) => {
           } }
           callback={ (e: any) => {
             if (e.status === 'NOT_FOUND') {
-              console.log("failed to get directions");
               setErrorState({ error: true });
               setDirections(null);
               return;

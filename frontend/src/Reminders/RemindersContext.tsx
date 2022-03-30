@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { getUpcomingEvents } from "../Schedule/GoogleAuth";
+import { getUpcomingEvents } from "../Schedule/getUpcomingEvents";
 import getReminders from "./getReminders";
 
 const RemindersContext = React.createContext(

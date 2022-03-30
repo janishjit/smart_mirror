@@ -25,6 +25,7 @@ var myConfig = new AWS.Config({
   region: "us-east-1",
 });
 
+const s3 = new AWS.S3();
 let lex = new LexRuntimeV2({ apiVersion: "2020-08-07", region: "us-east-1" });
 const makeParams = (inputText: string): LexRuntimeV2.RecognizeTextRequest => ({
   botId: "CGF3YFJABT",
@@ -54,6 +55,29 @@ class Server {
     this.app.use(bodyParser.urlencoded({ extended: true }));
     this.app.get("/", (req, res) => {
       res.send("hello world!");
+    });
+    this.app.get("/pants", async (req, res) => {
+      let result = await s3
+        .listObjects({
+          Bucket: "magic-mirror-clothing-images",
+          Prefix: "pants",
+        })
+        .promise();
+      result.Contents?.splice(0, 1);
+      let keys = result.Contents?.map((obj) => obj.Key);
+      res.json(keys);
+    });
+
+    this.app.get("/shirts", async (req, res) => {
+      let result = await s3
+        .listObjects({
+          Bucket: "magic-mirror-clothing-images",
+          Prefix: "shirts",
+        })
+        .promise();
+      result.Contents?.splice(0, 1);
+      let keys = result.Contents?.map((obj) => obj.Key);
+      res.json(keys);
     });
 
     this.setupSockets();

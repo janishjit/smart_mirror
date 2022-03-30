@@ -1,5 +1,6 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { getUpcomingEvents } from "../Schedule/GoogleAuth";
+import { getUpcomingEvents } from "../Schedule/getUpcomingEvents";
+import { GoogleEvent } from "../types";
 
 const EventsContext = React.createContext(
   {} as any
@@ -7,10 +8,8 @@ const EventsContext = React.createContext(
 
 export const EventsProvider = (props: { children?: ReactNode }) => {
   const { children } = props;
-  const [events, _setEvents] = useState<any>([]);
-  function setEvents(eventsList: any) {
-    console.log(eventsList);
-
+  const [events, _setEvents] = useState<GoogleEvent[]>([]);
+  function setEvents(eventsList: GoogleEvent[]) {
     _setEvents(eventsList);
   }
 

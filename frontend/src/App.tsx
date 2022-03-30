@@ -17,75 +17,19 @@ import Closet from "./Closet/Closet";
 import ClosetDetailed from "./ClosetDetailed";
 import ScheduleDetailed from "./ScheduleDetailed";
 import Emails from "./Emails/Emails";
+import { EmailsProvider } from "./EmailsContext/EmailsContext";
+import EmailsDetailed from "./EmailsDetailed";
 socket.emit("connection", "hello world")
 
 // Look at figma for modules, claim modules with a comment on the figma file
 // https://www.figma.com/file/yrqrIB1452Kw8NM9943uOt/Magic-Mirror-Wireframes?node-id=2%3A17
-const EXAMPLE_SCHEDULE = [
-  { time: "8:00am", event: "STAT 251 " },
-  { time: "11:00am", event: " CPEN 391" },
-  { time: "1:00pm", event: "Lunch" },
-  { time: "2:00pm", event: "ELEC 331" },
-  { time: "4:00pm", event: "CPSC 320" },
-  { time: "8:00pm", event: "Movie Night at Josh’s" },
-];
-
-const EXAMPLE_REMINDERS = [
-  "Buy Tickets to Rex Orange County",
-  "Pack your headphones before you leave",
-  "Book Dental Appt.",
-  "Buy Dad's B-Day Gift"
-]
 
 const DISCOVERY_DOCS = [
   "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
+  "https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"
 ];
-const SCOPES = "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.readonly";
+const SCOPES = ["https://www.googleapis.com/auth/calendar.readonly", "https://www.googleapis.com/auth/gmail.readonly"].join(" ");
 
-
-/**
- * Print the summary and start datetime/date of the next ten events in
- * the authorized user's calendar. If no events are found an
- * appropriate message is printed.
- */
-function listUpcomingEvents() {
-  /* @ts-ignore */
-  gapi.client.calendar.events
-    .list({
-      calendarId: "primary",
-      timeMin: new Date().toISOString(),
-      showDeleted: false,
-      singleEvents: true,
-      maxResults: 10,
-      orderBy: "startTime",
-    })
-    .then(function (response: any) {
-      var events = response.result.items;
-      console.log("Upcoming events:");
-
-      if (events.length > 0) {
-        for (let i = 0; i < events.length; i++) {
-          var event = events[i];
-          var when = event.start.dateTime;
-          if (!when) {
-            when = event.start.date;
-          }
-          console.log(event.summary + " (" + when + ")");
-        }
-      } else {
-        console.log("No upcoming events found.");
-      }
-    });
-}
-
-function updateSigninStatus(isSignedIn: boolean) {
-  console.log(isSignedIn);
-  if (isSignedIn) {
-    listUpcomingEvents();
-  } else {
-    console.log("not signed in");
-  }
-}
 
 /**
  *  Initializes the API client library and sets up sign-in state
@@ -116,75 +60,99 @@ function initClient(onSuccess: Function) {
 Amplify.configure(awsmobile);
 
 enum ShowState {
-  BLANK,
-  CLOSET,
-  SCHEDULE,
+  Blank = "Blank",
+  ShowCloset = "ShowCloset",
+  ShowDay = "ShowDay",
+  ShowUnread = "ShowUnread",
 }
 
 function App() {
   const [events, setEvents] = useState<any>([]);
-  const [loaded, setLoaded] = useState(false);
-  const [showState, setShowState] = useState<ShowState>(ShowState.BLANK);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [showState, setShowState] = useState<ShowState>(ShowState.Blank);
   useEffect(() => {
     socket.on("voiceresponse", voiceResponse => {
+      console.log(voiceResponse);
+
       const intentName = voiceResponse.intentName;
-      if (intentName === "ShowCloset") {
-        setShowState(ShowState.CLOSET);
-      }
-      else if (intentName === "ShowDay") {
-        setShowState(ShowState.SCHEDULE);
+
+      switch (intentName) {
+        // Events which change the UI
+        case ShowState.ShowCloset:
+        case ShowState.ShowDay:
+        case ShowState.ShowUnread:
+          setShowState(intentName);
+          break;
+        default:
+          break;
       }
     })
   }, []);
   useEffect(() => {
-    // @ts-ignore
     gapi.load("client:auth2", () => {
-      // @ts-ignore
-      console.log(gapi);
 
       initClient(() => {
-        // @ts-ignore
-        console.log(gapi.auth2.BasicProfile);
-        // @ts-ignore
         let auth = gapi.auth2.getAuthInstance();
+        auth.isSignedIn.listen(() => {
+          if (auth.isSignedIn.get()) {
+            setLoggedIn(true);
+          }
+        });
         const isSignedIn = auth.isSignedIn.get();
         if (!isSignedIn) auth.signIn();
-        setLoaded(true);
+        else {
+          setLoggedIn(true);
+        }
       });
     })
-  }, [])
-  if (!loaded) return <div></div>
+  }, []);
+
+  if (!loggedIn) return <div className="App">
+    <div className="col1">
+    </div>
+    <div className="reflection-area">
+      <button onClick={ () => gapi.auth2.getAuthInstance().signIn() }>Log in with Google</button>
+    </div>
+    <div className="col3">
+      <div className="closet">
+      </div>
+    </div>
+  </div>
+
+
   return (
     <div className="App">
-      <div className="col1">
-        <Welcome
-          name={ "Trevor" }
-          quote={
-            "Growing old is mandatory, growing up is optional. - Anonymous"
-          }
-        />
+      <EmailsProvider>
         <EventsProvider>
-          <Directions />
-          <Schedule />
+          <div className="col1">
+            <Welcome
+              name={ gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getGivenName() }
+              quote={
+                "Growing old is mandatory, growing up is optional. - Anonymous"
+              }
+            />
+            <Directions />
+            <Schedule onClickFocus={ () => setShowState(ShowState.ShowDay) } />
+          </div>
+          <div className="reflection-area">
+            { showState === ShowState.ShowCloset && <ClosetDetailed /> }
+            { showState === ShowState.ShowDay && <ScheduleDetailed /> }
+            { showState === ShowState.ShowUnread && <EmailsDetailed /> }
+            <Speech />
+          </div>
+          <div className="col3">
+            <DateTime />
+            <RemindersProvider>
+              <Reminders />
+            </RemindersProvider>
+            <Weather />
+            <div className="closet">
+              <Emails onClickFocus={ () => setShowState(ShowState.ShowUnread) } />
+              <Closet onClickFocus={ () => setShowState(ShowState.ShowCloset) } />
+            </div>
+          </div>
         </EventsProvider>
-      </div>
-      <div className="reflection-area">
-        { showState === ShowState.CLOSET && <ClosetDetailed /> }
-        { showState === ShowState.SCHEDULE && <ScheduleDetailed /> }
-        <Speech />
-      </div>
-      <div className="col3">
-        <DateTime
-        />
-        <RemindersProvider>
-          <Reminders />
-        </RemindersProvider>
-        <Weather />
-        <div className="closet">
-          <Emails />
-          <Closet />
-        </div>
-      </div>
+      </EmailsProvider>
     </div>
   );
 }

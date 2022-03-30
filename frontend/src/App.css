@@ -6,10 +6,12 @@
 }
 
 .reflection-area {
+  max-height: 100vh;
   background-color: var(--bg-light);
   flex-direction: column;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   flex: 0.67;
 }
 
@@ -24,6 +26,7 @@
 .reflection-area {
   padding: 1em;
   flex-direction: column;
+  justify-content: center;
   display: flex;
 }
 
@@ -32,4 +35,17 @@
   flex-direction: row;
   flex: 1;
   justify-content: space-evenly;
+}
+
+.carousel .control-next.control-arrow:before {
+  border-left: 8px solid black !important;
+}
+
+.carousel .control-prev.control-arrow:before {
+  border-right: 8px solid black !important;
+}
+
+li.slide {
+  max-height: 50vh;
+  object-fit: contain;
 }

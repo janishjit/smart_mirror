@@ -1,6 +1,8 @@
 .main {
   text-align: center;
   font-size: larger;
+  position: absolute;
+  bottom: 0;
 }
 
 .fading {
