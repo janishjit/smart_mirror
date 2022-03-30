@@ -371,7 +371,7 @@ assign HEX0 = 7'b0101011;
 
 always@(posedge CLOCK_50)
 begin
-      IO_ACK_WIRE < = IO_Bus_Enable_WIRE;
+      IO_ACK_WIRE <= IO_Bus_Enable_WIRE;
 end
 
 OnChipSerialIO     SerialIOPorts (
