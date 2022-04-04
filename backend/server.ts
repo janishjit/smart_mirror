@@ -2,6 +2,7 @@
 // const express = require("express");
 // const bodyParser = require("body-parser");
 // const socketIo = require("socket.io");
+import { v4 as uuid } from "uuid";
 import http from "http";
 import express from "express";
 import bodyParser from "body-parser";
@@ -51,11 +52,14 @@ class Server {
       );
       next();
     });
+
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
+
     this.app.get("/", (req, res) => {
       res.send("hello world!");
     });
+
     this.app.get("/pants", async (req, res) => {
       let result = await s3
         .listObjects({
@@ -80,12 +84,14 @@ class Server {
       res.json(keys);
     });
 
-    this.app.post("/upload", async (req, res) => {
-      console.log("recieved upload");
+    this.app.get("/uploadUrl", async (req, res) => {
+      let tempName = uuid();
+      let signedURL = await s3.getSignedUrlPromise("putObject", {
+        Bucket: "magic-mirror-clothing-images",
+        Key: `temp/${tempName}`,
+      });
 
-      console.log(req.body);
-
-      res.sendStatus(200);
+      res.status(200).send(signedURL);
     });
 
     this.setupSockets();

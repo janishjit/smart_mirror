@@ -41,11 +41,14 @@ export default function App() {
     let blob = await fetchImageFromUri(photo.uri);
 
     try {
-      let res = await fetch("http://107.22.249.15:8080/upload", {
+      let res = await fetch("https://qez8nso89e.execute-api.us-east-1.amazonaws.com/Test", {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
         method: 'POST',
         body: blob
       });
-      console.log(res);
+      console.log(await res.json());
     } catch (e) {
       console.log("error");
 
