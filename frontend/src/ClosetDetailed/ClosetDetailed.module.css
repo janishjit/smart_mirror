@@ -6,3 +6,7 @@
   height: 80%;
   object-fit: contain;
 }
+
+.imgContainer {
+  height: 100%;
+}

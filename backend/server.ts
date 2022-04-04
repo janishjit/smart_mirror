@@ -80,6 +80,14 @@ class Server {
       res.json(keys);
     });
 
+    this.app.post("/upload", async (req, res) => {
+      console.log("recieved upload");
+
+      console.log(req.body);
+
+      res.sendStatus(200);
+    });
+
     this.setupSockets();
   }
 

@@ -12,7 +12,7 @@ const Pants = ({ pants }: PantsProps) => {
         infiniteLoop
         swipeable emulateTouch axis="horizontal" showThumbs={ false } showArrows showIndicators={ false } showStatus={ false }>
         { pants.map((pant: string) =>
-          <div style={ { height: "100%" } }>
+          <div className={ styles.imgContainer }>
             <img src={ pant } className={ styles.clothing } />
           </div>
         ) }

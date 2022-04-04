@@ -20,7 +20,7 @@ const Shirts = ({ shirts }: ShirtsProps) => {
         showStatus={ false }
       >
         { shirts.map((shirt: string) => (
-          <div>
+          <div className={ styles.imgContainer }>
             <img src={ shirt } className={ styles.clothing } />
           </div>
         )) }

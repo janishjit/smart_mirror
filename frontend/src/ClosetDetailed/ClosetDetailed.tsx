@@ -15,7 +15,7 @@ const ClosetDetailed = (props: ClosetDetailedProps) => {
   }, []);
   return (
     <div className={ styles.root }>
-      <Shirts shirts={ [...clothing.shirts, ...clothing.shirts] } />
+      <Shirts shirts={ clothing.shirts } />
       <Pants pants={ [...clothing.pants, ...clothing.pants] } />
     </div>
   );
