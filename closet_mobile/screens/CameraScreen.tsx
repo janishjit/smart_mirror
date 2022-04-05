@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions, Button, us
 import { Camera } from 'expo-camera';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { RootTabScreenProps } from '../types';
 
 const window = Dimensions.get("window");
 
@@ -11,7 +12,7 @@ enum ViewState {
   POST_UPLOAD
 }
 
-export default function App() {
+export default function App({ navigation }: RootTabScreenProps<"Camera">) {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [canTakePhoto, setCanTakePhoto] = useState(false);
   const [viewState, setViewState] = useState(ViewState.CAMERA);
@@ -84,7 +85,7 @@ export default function App() {
         <Text style={ [styles.leftTitle, { color: textColor, paddingTop: insets.top }] }>Item Uploaded!</Text>
         <Text style={ [styles.subtitle, { color: textColor }] }>Categorize it in your <Text style={ { fontWeight: "bold" } }>Closet</Text></Text>
         <View style={ [styles.container, styles.body] }>
-          <TouchableOpacity style={ styles.textButton }>
+          <TouchableOpacity style={ styles.textButton } onPress={ () => { setViewState(ViewState.CAMERA); navigation.navigate("Closet"); } }>
             <Text style={ { color: textColor, textAlign: 'center', fontWeight: "bold", fontSize: 15 } }>Take Me There</Text>
           </TouchableOpacity>
           <TouchableOpacity style={ [styles.textButton, { backgroundColor: "#1BBBFB" }] } onPress={ () => { setPhoto(null); setViewState(ViewState.CAMERA) } }>
@@ -97,7 +98,7 @@ export default function App() {
 
   if (photo) {
     return <View style={ [styles.confirmContainer, { paddingTop: insets.top, backgroundColor: bgColor }] }>
-      <Text style={ [styles.title, { color: textColor }] }>Confirm Upload</Text>
+      <Text style={ [styles.title, { color: textColor }] }>Retake or Upload</Text>
       <Image width={ window.width } height={ window.height / 2 } source={ { uri: `${photo.uri}` } } style={ { flex: 1, width: window.width, height: window.height / 2 } } />
       <View style={ styles.bottomButtons }>
         <TouchableOpacity onPress={ () => { setPhoto(null) } } >
@@ -105,8 +106,7 @@ export default function App() {
         </TouchableOpacity>
         <TouchableOpacity onPress={ () => {
           uploadImage();
-        } }>
-          <AntDesign name="upload" size={ 40 } color={ textColor } />
+        } }><AntDesign name="upload" size={ 40 } color={ textColor } />
         </TouchableOpacity>
       </View>
     </View>
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   title: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-evenly",
     alignItems: "flex-end",
   },
   confirmContainer: {

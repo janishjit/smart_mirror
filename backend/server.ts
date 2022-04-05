@@ -96,6 +96,71 @@ class Server {
       res.json(keys);
     });
 
+    this.app.get("/moveitem", async (req, res) => {
+      let item = req.query.item as string;
+      let itemName = item.split("amazonaws.com/")[1];
+      let dest = req.query.dest;
+      let itemPath = itemName.split("/");
+      let itemId = itemPath[itemPath.length - 1];
+      console.log(itemId);
+
+      console.log(item);
+      console.log(itemName);
+      console.log(dest);
+      try {
+        console.log(
+          "Copying object to",
+          `magic-mirror-clothing-images/${dest}/${itemName}`
+        );
+
+        await s3
+          .copyObject({
+            Bucket: "magic-mirror-clothing-images",
+            Key: `${dest}/${itemId}`,
+            CopySource: `/magic-mirror-clothing-images/${itemName}`,
+          })
+          .promise();
+
+        console.log(
+          "Deleting object",
+          `magic-mirror-clothing-images/${itemName}`
+        );
+
+        await s3
+          .deleteObject({
+            Bucket: "magic-mirror-clothing-images",
+            Key: `${itemName}`,
+          })
+          .promise();
+
+        res.sendStatus(200);
+      } catch (e) {
+        res.send({ err: e }).status(500);
+      }
+    });
+
+    this.app.get("/deleteitem", async (req, res) => {
+      let item = req.query.item as string;
+      let itemName = item.split("amazonaws.com/")[1];
+      try {
+        console.log(
+          "Deleting object",
+          `magic-mirror-clothing-images/${itemName}`
+        );
+
+        await s3
+          .deleteObject({
+            Bucket: "magic-mirror-clothing-images",
+            Key: `${itemName}`,
+          })
+          .promise();
+
+        res.sendStatus(200);
+      } catch (e) {
+        res.send({ err: e }).status(500);
+      }
+    });
+
     this.setupSockets();
   }
 

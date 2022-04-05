@@ -14,7 +14,6 @@ export default function Closet({ navigation }: RootTabScreenProps<"Closet">) {
   let [uncategorized, setUncategorized] = React.useState<any[]>([]);
   let [shirts, setShirts] = React.useState<any[]>([]);
   let [pants, setPants] = React.useState<any[]>([]);
-  console.log(uncategorized);
 
   const updateClothing = () => {
     fetchUncategorizedClothes().then(setUncategorized);
@@ -27,27 +26,26 @@ export default function Closet({ navigation }: RootTabScreenProps<"Closet">) {
     updateClothing();
     setInterval(() => {
       console.log("getting clothing");
-
       updateClothing();
     }, 10000);
   }, [])
   return (
     <ScrollView bounces={ false } style={ [styles.container, { backgroundColor: bgColor, padding: 10, }] } >
       {/* Uncategorized */ }
-      <View style={ [styles.flex, { backgroundColor: bgColor }] }>
+      { uncategorized.length > 0 && <View style={ [styles.flex, { backgroundColor: bgColor }] }>
         <Text style={ styles.title }>Uncategorized</Text>
         <View style={ styles.clothingList }>
           { uncategorized.map((item: any, index) => {
             return <ClothingItem onPress={ () => { navigation.navigate("Modal", { item }) } } itemLink={ item } key={ index } />
           }) }
         </View>
-      </View>
+      </View> }
       {/* Shirts */ }
       <View style={ [styles.flex, { backgroundColor: bgColor }] }>
         <Text style={ styles.title }>Shirts</Text>
         <View style={ styles.clothingList }>
           { shirts.map((item: any, index) => {
-            return <ClothingItem itemLink={ item } key={ index } />
+            return <ClothingItem onPress={ () => { navigation.navigate("Modal", { item }) } } itemLink={ item } key={ index } />
           }) }
         </View>
       </View>
@@ -56,7 +54,7 @@ export default function Closet({ navigation }: RootTabScreenProps<"Closet">) {
         <Text style={ styles.title }>Pants</Text>
         <View style={ styles.clothingList }>
           { pants.map((item: any, index) => {
-            return <ClothingItem itemLink={ item } key={ index } />
+            return <ClothingItem onPress={ () => { navigation.navigate("Modal", { item }) } } itemLink={ item } key={ index } />
           }) }
         </View>
       </View>

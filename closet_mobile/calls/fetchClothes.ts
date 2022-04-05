@@ -1,14 +1,15 @@
 const S3_BUCKET_PREFIX = "http://magic-mirror-clothing-images.s3.amazonaws.com";
-
+const API_URL = "http://107.22.249.15:8080";
+// const API_URL = "http://localhost:8080";
 const fetchUncategorizedClothes = async () => {
-  let res = await fetch("http://localhost:8080/uncategorized");
+  let res = await fetch(`${API_URL}/uncategorized`);
   let json = await res.json();
   let links = json.map((key: string) => `${S3_BUCKET_PREFIX}/${key}`);
   return links;
 };
 
 const fetchShirts = async () => {
-  let res = await fetch("http://localhost:8080/shirts");
+  let res = await fetch(`${API_URL}/shirts`);
   let json = await res.json();
   let links = json.map((key: string) => `${S3_BUCKET_PREFIX}/${key}`);
 
@@ -16,7 +17,7 @@ const fetchShirts = async () => {
 };
 
 const fetchPants = async () => {
-  let res = await fetch("http://localhost:8080/pants");
+  let res = await fetch(`${API_URL}/pants`);
   let json = await res.json();
   let links = json.map((key: string) => `${S3_BUCKET_PREFIX}/${key}`);
 

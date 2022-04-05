@@ -8,10 +8,38 @@ import { Text, View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 import pants from "./pants.png";
 
+const API_URL = "http://107.22.249.15:8080";
+
 const window = Dimensions.get("window");
 const pictureDimension = (window.width - 20);
 export default function ModalScreen({ navigation, route }: any) {
   const item = route.params.item;
+  const [loading, setLoading] = React.useState(false);
+  const isPants = item.includes("pants");
+  const isShirt = item.includes("shirts");
+
+  const changeCategory = async (dest: string) => {
+    if (isShirt && dest == "shirts") return;
+    if (isPants && dest == "pants") return;
+    if (loading) return;
+    setLoading(true);
+    let res = await fetch(`${API_URL}/moveitem?item=${item}&dest=${dest}`);
+    setLoading(false);
+    if (res.ok) {
+      navigation.navigate("Closet");
+    }
+  }
+
+  const deleteItem = async () => {
+    if (loading) return;
+    setLoading(true);
+    let res = await fetch(`${API_URL}/deleteitem?item=${item}`);
+    setLoading(false);
+    if (res.ok) {
+      navigation.navigate("Closet");
+    }
+  }
+
 
   return (
     <View style={ styles.container }>
@@ -19,14 +47,14 @@ export default function ModalScreen({ navigation, route }: any) {
       <Text style={ { textAlign: "center", fontSize: 20, } }>Categorize</Text>
       <View style={ styles.bottomContainer }>
         <View style={ styles.buttons }>
-          <TouchableOpacity onPress={ () => { } } style={ styles.button }>
+          <TouchableOpacity onPress={ () => { changeCategory("shirts") } } style={ [styles.button, { backgroundColor: isShirt ? "#00cc22" : "grey" }] }>
             <MaterialCommunityIcons name="tshirt-v" size={ 50 } />
           </TouchableOpacity>
-          <TouchableOpacity style={ styles.button }>
+          <TouchableOpacity onPress={ () => { changeCategory("pants") } } style={ [styles.button, { backgroundColor: isPants ? "#00cc22" : "grey" }] }>
             <Image style={ { width: 50, height: 50 } } source={ pants }></Image>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity style={ styles.textButton }><Text style={ { textAlign: "center", fontSize: 20, fontWeight: "bold" } }>Delete</Text></TouchableOpacity>
+        <TouchableOpacity onPress={ () => deleteItem() } style={ styles.textButton }><Text style={ { textAlign: "center", fontSize: 20, fontWeight: "bold" } }>Delete</Text></TouchableOpacity>
       </View>
       <StatusBar style={ Platform.OS === 'ios' ? 'light' : 'auto' } />
     </View>
@@ -40,7 +68,7 @@ const styles = StyleSheet.create({
     width: "50%",
     marginTop: 10,
     borderRadius: 5,
-    backgroundColor: "#FFCCCC",
+    backgroundColor: "#cc0000",
     alignItems: "center",
     justifyContent: "center",
   },

@@ -65,7 +65,7 @@ function BottomTabNavigator() {
         tabBarStyle: {
           backgroundColor: bgColor,
         },
-        tabBarInactiveTintColor: "black",
+        tabBarInactiveTintColor: Colors[colorScheme].tabIconDefault,
       } }>
       <BottomTab.Screen
         name="Closet"
