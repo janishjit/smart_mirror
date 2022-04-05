@@ -13,6 +13,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID as string;
+
 const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY as string;
 if (!accessKeyId || !secretAccessKey)
   throw new Error("Please pass aws credentials via .env");
@@ -84,14 +85,15 @@ class Server {
       res.json(keys);
     });
 
-    this.app.get("/uploadUrl", async (req, res) => {
-      let tempName = uuid();
-      let signedURL = await s3.getSignedUrlPromise("putObject", {
-        Bucket: "magic-mirror-clothing-images",
-        Key: `temp/${tempName}`,
-      });
-
-      res.status(200).send(signedURL);
+    this.app.get("/uncategorized", async (req, res) => {
+      let result = await s3
+        .listObjects({
+          Bucket: "magic-mirror-clothing-images",
+          Delimiter: "/",
+        })
+        .promise();
+      let keys = result.Contents?.map((obj) => obj.Key);
+      res.json(keys);
     });
 
     this.setupSockets();

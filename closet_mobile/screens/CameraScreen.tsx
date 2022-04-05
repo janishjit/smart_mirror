@@ -6,13 +6,21 @@ import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const window = Dimensions.get("window");
 
+enum ViewState {
+  CAMERA,
+  POST_UPLOAD
+}
+
 export default function App() {
-  const [hasPermission, setHasPermission] = useState(null);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [canTakePhoto, setCanTakePhoto] = useState(false);
+  const [viewState, setViewState] = useState(ViewState.CAMERA);
   const camera = useRef<Camera>(null);
   const [photo, setPhoto] = useState<any>(null);
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
+  const textColor = colorScheme === 'dark' ? 'white' : 'black';
+  const bgColor = colorScheme === 'dark' ? '#121212' : '#F0E5D0';
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -22,7 +30,7 @@ export default function App() {
 
   const handleCaptureIn = async () => {
     if (canTakePhoto && camera.current) {
-      const photo = await camera.current.takePictureAsync();
+      const photo = await camera.current.takePictureAsync({ quality: 0.5 });
       console.log(photo);
       setPhoto(photo);
     }
@@ -38,25 +46,30 @@ export default function App() {
   const uploadImage = async () => {
     if (!photo) return;
     console.log("uploading image");
+    let uploadURL = await fetch("https://o0pbxkc70l.execute-api.us-east-1.amazonaws.com/uploads");
+    let json = await uploadURL.json();
+    let signedURL = json.uploadURL;
+    let key = json.Key;
+
     let blob = await fetchImageFromUri(photo.uri);
 
-    try {
-      let res = await fetch("https://qez8nso89e.execute-api.us-east-1.amazonaws.com/Test", {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        method: 'POST',
-        body: blob
-      });
-      console.log(await res.json());
-    } catch (e) {
-      console.log("error");
+    let res = await fetch(signedURL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': blob.type,
+      },
+      body: blob
+    });
 
-      console.log(e);
+    if (res.ok) {
+      console.log("uploaded");
+      setPhoto(null);
+      setViewState(ViewState.POST_UPLOAD);
     }
-
+    else {
+      console.log("error uploading image");
+    }
   }
-
 
   if (hasPermission === null) {
     return <View />;
@@ -65,19 +78,35 @@ export default function App() {
     return <Text>No access to camera</Text>;
   }
 
+  if (viewState === ViewState.POST_UPLOAD) {
+    return (
+      <View style={ [styles.container, styles.postUploadContainer, { backgroundColor: bgColor }] }>
+        <Text style={ [styles.leftTitle, { color: textColor, paddingTop: insets.top }] }>Item Uploaded!</Text>
+        <Text style={ [styles.subtitle, { color: textColor }] }>Categorize it in your <Text style={ { fontWeight: "bold" } }>Closet</Text></Text>
+        <View style={ [styles.container, styles.body] }>
+          <TouchableOpacity style={ styles.textButton }>
+            <Text style={ { color: textColor, textAlign: 'center', fontWeight: "bold", fontSize: 15 } }>Take Me There</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={ [styles.textButton, { backgroundColor: "#1BBBFB" }] } onPress={ () => { setPhoto(null); setViewState(ViewState.CAMERA) } }>
+            <Text style={ { color: textColor, textAlign: 'center', fontWeight: "bold", fontSize: 15 } }>Add Another Item</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
   if (photo) {
-    return <View style={ [styles.confirmContainer, { paddingTop: insets.top, backgroundColor: colorScheme === "dark" ? "#121212" : "white" }] }>
-      <Text style={ [styles.title, { color: colorScheme === "dark" ? "white" : "black" }] }>Confirm Upload</Text>
+    return <View style={ [styles.confirmContainer, { paddingTop: insets.top, backgroundColor: bgColor }] }>
+      <Text style={ [styles.title, { color: textColor }] }>Confirm Upload</Text>
       <Image width={ window.width } height={ window.height / 2 } source={ { uri: `${photo.uri}` } } style={ { flex: 1, width: window.width, height: window.height / 2 } } />
       <View style={ styles.bottomButtons }>
         <TouchableOpacity onPress={ () => { setPhoto(null) } } >
-          <MaterialCommunityIcons name="camera-retake" size={ 40 } color={ colorScheme === "dark" ? "white" : "black" } />
+          <MaterialCommunityIcons name="camera-retake" size={ 40 } color={ textColor } />
         </TouchableOpacity>
         <TouchableOpacity onPress={ () => {
-          console.log("hello world");
           uploadImage();
         } }>
-          <AntDesign name="upload" size={ 40 } color={ colorScheme === "dark" ? "white" : "black" } />
+          <AntDesign name="upload" size={ 40 } color={ textColor } />
         </TouchableOpacity>
       </View>
     </View>
@@ -85,8 +114,9 @@ export default function App() {
   }
 
   return (
-    <View style={ styles.container }>
+    <View style={ [styles.container, { backgroundColor: bgColor }] }>
       <Camera
+        zoom={ 0 }
         ref={ camera }
         style={ styles.camera } type={ Camera.Constants.Type.back } onCameraReady={ () => setCanTakePhoto(true) }>
         <TouchableOpacity style={ styles.buttonContainer } onPress={ () => {
@@ -99,6 +129,27 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  body: {
+    margin: 10,
+  },
+  textButton: {
+    padding: 10,
+    borderRadius: 5,
+    backgroundColor: '#6DCA30',
+    flex: 0,
+    margin: 10
+  },
+  subtitle: {
+    marginTop: 20,
+    fontSize: 20,
+  },
+  postUploadContainer: {
+    padding: 10,
+  },
+  leftTitle: {
+    fontSize: 35,
+    fontWeight: 'bold',
+  },
   title: {
     fontSize: 30,
     fontWeight: "bold",
