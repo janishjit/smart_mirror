@@ -19,6 +19,8 @@ import ScheduleDetailed from "./ScheduleDetailed";
 import Emails from "./Emails/Emails";
 import { EmailsProvider } from "./EmailsContext/EmailsContext";
 import EmailsDetailed from "./EmailsDetailed";
+import { ActionIcon } from "@mantine/core";
+import { Cross, X } from "tabler-icons-react";
 socket.emit("connection", "hello world")
 
 // Look at figma for modules, claim modules with a comment on the figma file
@@ -70,8 +72,9 @@ function App() {
   const [events, setEvents] = useState<any>([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [showState, setShowState] = useState<ShowState>(ShowState.Blank);
+  const [travelMode, setTravelMode] = useState("DRIVING");
   useEffect(() => {
-    socket.on("voiceresponse", voiceResponse => {
+    let listener = socket.on("voiceresponse", voiceResponse => {
       console.log(voiceResponse);
 
       const intentName = voiceResponse.intentName;
@@ -83,11 +86,21 @@ function App() {
         case ShowState.ShowUnread:
           setShowState(intentName);
           break;
+        case "ChangeTravelMode":
+          console.log(travelMode);
+          setTravelMode(() => travelMode === "DRIVING" ? "TRANSIT" : "DRIVING");
+          console.log(travelMode);
+
+          break;
         default:
           break;
       }
-    })
-  }, []);
+    });
+
+    return () => {
+      listener.removeListener("voiceresponse");
+    }
+  }, [setTravelMode, setShowState, travelMode]);
   useEffect(() => {
     gapi.load("client:auth2", () => {
 
@@ -131,10 +144,13 @@ function App() {
                 "Growing old is mandatory, growing up is optional. - Anonymous"
               }
             />
-            <Directions />
+            <Directions setTravelMode={ setTravelMode } travelMode={ travelMode } />
             <Schedule onClickFocus={ () => setShowState(ShowState.ShowDay) } />
           </div>
           <div className="reflection-area">
+            { showState !== ShowState.Blank && <ActionIcon style={ { zIndex: 200, position: "absolute", top: 10, right: 15 } } onClick={ () => setShowState(ShowState.Blank) }>
+              <X />
+            </ActionIcon> }
             { showState === ShowState.ShowCloset && <ClosetDetailed /> }
             { showState === ShowState.ShowDay && <ScheduleDetailed /> }
             { showState === ShowState.ShowUnread && <EmailsDetailed /> }

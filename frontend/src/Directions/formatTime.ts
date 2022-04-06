@@ -9,9 +9,13 @@ const getMinutesFromDuration = (durationInSeconds: number) => {
   return minutes;
 };
 
-const getLeaveAt = (arrivalTime: number, durationInSeconds: number) => {
-  if (arrivalTime - durationInSeconds * 10e9) return new Date(Date.now());
-  return new Date(arrivalTime - durationInSeconds * 10e9);
+const getLeaveAt = (
+  arrivalTimeMilliseconds: number,
+  durationInDeciSeconds: number
+) => {
+  let durationInMilliseconds = durationInDeciSeconds * 10e2;
+  if (arrivalTimeMilliseconds < Date.now() + durationInMilliseconds) return 0;
+  return new Date(arrivalTimeMilliseconds - durationInMilliseconds);
 };
 
 export { getLeaveAt, getMinutesFromDuration };

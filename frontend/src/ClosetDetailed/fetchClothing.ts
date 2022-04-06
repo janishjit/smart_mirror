@@ -1,4 +1,6 @@
-const BACKEND_URL = "http://localhost:8080";
+// const BACKEND_URL = "http://localhost:8080";
+const BACKEND_URL = "http://107.22.249.15:8080";
+
 const S3_BUCKET_PREFIX = "http://magic-mirror-clothing-images.s3.amazonaws.com";
 const fetchShirts = async () => {
   let res = await fetch(`${BACKEND_URL}/shirts`);
