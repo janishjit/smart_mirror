@@ -12,7 +12,7 @@ type WeatherData = {
 }
 
 const LoadingWeather = () => {
-  return <div>loading...</div>
+  return null;
 }
 
 const Weather = (props: WeatherProps) => {

@@ -4,9 +4,7 @@ type WelcomeProps = { name: string; quote: string };
 const Welcome = ({ name, quote }: WelcomeProps) => {
   return (
     <>
-      <div className={ [styles.hi, "text"].join(" ") }>Hi,</div>
-      <div className={ [styles.name, "text"].join(" ") }>{ name }</div>
-      <p className={ [styles.quote, "text"].join(" ") }>{ quote }</p>
+      <div className={ [styles.hi, "text"].join(" ") }>Hi, <strong>{ name }</strong></div>
     </>
   );
 };

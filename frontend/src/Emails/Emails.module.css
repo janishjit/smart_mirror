@@ -18,9 +18,10 @@
 
 .badge {
   position: absolute;
-  display: grid;
+  display: flex;
   line-height: 0px;
-  place-items: center;
+  align-items: center;
+  justify-content: center;
   top: -5px;
   right: -7px;
   background-color: #f44336;

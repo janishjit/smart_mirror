@@ -1,4 +1,4 @@
-const weatherAPIEndpoint = `https://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&q=Vancouver&days=1&aqi=no&alerts=no`;
+const weatherAPIEndpoint = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.REACT_APP_WEATHER_API_KEY}&q=Vancouver&days=1&aqi=no&alerts=no`;
 
 const getWeather = async () => {
   const res = await fetch(weatherAPIEndpoint);
@@ -12,7 +12,7 @@ const getWeather = async () => {
   condition = toTitleCase(condition);
   let icon: string = today.condition.icon;
   icon = icon.substring(2, icon.length);
-  icon = "https://" + icon;
+  icon = "http://" + icon;
   return {
     low,
     high,

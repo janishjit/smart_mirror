@@ -122,3 +122,4 @@ build/
 .venv
 
 lambdas/*/package
+certs

@@ -21,6 +21,7 @@
     "gapi-script": "^1.2.0",
     "he": "^1.2.0",
     "react": "^17.0.2",
+    "react-app-polyfill": "^3.0.0",
     "react-dom": "^17.0.2",
     "react-responsive-carousel": "^3.2.23",
     "react-scripts": "5.0.0",
@@ -43,9 +44,7 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "firefox 49"
     ],
     "development": [
       "last 1 chrome version",

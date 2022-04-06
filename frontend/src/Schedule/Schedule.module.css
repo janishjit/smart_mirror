@@ -24,12 +24,14 @@ li {
 }
 
 .container {
+  max-height: 15vh;
   position: relative;
   border: 1px solid var(--text-light);
   border-radius: 15px;
   padding: 10px;
   font-weight: 200;
   margin-top: 10px;
+  overflow: auto;
 }
 
 .iconButton {
