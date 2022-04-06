@@ -140,7 +140,7 @@ const GoogleMapWrapper = ({ travelMode, setTravelMode }: GoogleMapWrapperProps) 
           zoom={ 10 }
           onLoad={ onLoad }
           onUnmount={ onUnmount }
-          options={ { streetViewControl: false, mapTypeControl: false } }
+          options={ { streetViewControl: false, mapTypeControl: false, fullscreenControl: false } }
         >
           <DirectionsRenderer directions={ directions } />
         </GoogleMap>
