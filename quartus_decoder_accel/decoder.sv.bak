@@ -1,0 +1,11 @@
+module decoder(input logic CLOCK_50,
+                input logic start,
+			    output logic finish);
+
+s_memory sm_inst (.address(address),
+					.clock(CLOCK_50),
+					.data(data),
+					.wren(wren),
+					.q(q) );
+
+endmodule
