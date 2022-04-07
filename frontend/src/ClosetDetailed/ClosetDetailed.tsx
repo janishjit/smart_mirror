@@ -12,6 +12,11 @@ const ClosetDetailed = (props: ClosetDetailedProps) => {
     fetchClothing().then((fetchedClothing) => {
       setClothing(fetchedClothing);
     });
+    setInterval(() => {
+      fetchClothing().then((fetchedClothing) => {
+        setClothing(fetchedClothing);
+      });
+    }, 10000);
   }, []);
   return (
     <div className={ styles.root }>

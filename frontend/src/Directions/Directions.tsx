@@ -31,7 +31,7 @@ const GoogleMapWrapper = ({ travelMode, setTravelMode }: GoogleMapWrapperProps) 
   const [map, setMap] = useState(null);
   const [directions, setDirections] = useState<any>(null);
   const [origin, setOrigin] = useState<null | google.maps.Place>({
-    query: "5983 Gray Ave.",
+    query: "6138 Student Union Blvd, Vancouver",
   });
   const events = useEvents();
   // const [travelMode, setTravelMode] = useState<google.maps.TravelMode>("DRIVING" as any);

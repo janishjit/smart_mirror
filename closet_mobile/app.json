@@ -19,7 +19,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.trevorflanigan.closet-catalogue"
     },
     "android": {
       "adaptiveIcon": {

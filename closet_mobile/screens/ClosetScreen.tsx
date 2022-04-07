@@ -27,7 +27,7 @@ export default function Closet({ navigation }: RootTabScreenProps<"Closet">) {
     setInterval(() => {
       console.log("getting clothing");
       updateClothing();
-    }, 10000);
+    }, 1000);
   }, [])
   return (
     <ScrollView bounces={ false } style={ [styles.container, { backgroundColor: bgColor, padding: 10, }] } >

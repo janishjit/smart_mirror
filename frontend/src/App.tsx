@@ -72,7 +72,7 @@ function App() {
   const [events, setEvents] = useState<any>([]);
   const [loggedIn, setLoggedIn] = useState(false);
   const [showState, setShowState] = useState<ShowState>(ShowState.Blank);
-  const [travelMode, setTravelMode] = useState("DRIVING");
+  const [travelMode, setTravelMode] = useState("TRANSIT");
   useEffect(() => {
     let listener = socket.on("voiceresponse", voiceResponse => {
       console.log(voiceResponse);
