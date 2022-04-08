@@ -1,0 +1,6 @@
+DATE = "17:10:02 December 30, 2016"
+QUARTUS_VERSION = "16.0.2"
+
+# Revisions
+
+PROJECT_REVISION = "WiFi_Network_Time"
